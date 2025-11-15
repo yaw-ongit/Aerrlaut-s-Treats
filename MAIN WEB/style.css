@@ -254,6 +254,30 @@ section {
     transition: transform 0.4s ease;
 }
 
+/* Styling untuk featured product (mis. Burnt Cheesecake) */
+.product-card.product-featured {
+    /* ambil seluruh lebar grid dan batasi maksimalnya, lalu pusatkan */
+    grid-column: 1 / -1;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.product-card.product-featured img {
+    height: 320px; /* lebih besar untuk banner */
+    object-fit: cover;
+}
+
+/* Hilangkan judul duplikat di dalam kartu featured karena section sudah punya heading */
+.product-card.product-featured h3 {
+    display: none;
+}
+
+.product-card.product-featured p {
+    padding: 25px 30px 30px;
+    font-size: 1em;
+    color: var(--color-text-dark);
+}
+
 /* Animasi 2: Bounce Ringan pada Gambar Produk */
 .product-card img:hover {
     transform: scale(1.03);

@@ -1,26 +1,43 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Data Produk untuk Modal (Sesuai dengan nama produk B. Inggris yang baru) ---
+    // Produk Data
     const productData = {
-        1: { title: "Brownie Choco Crunchy 🌰", description: "Brownie premium dengan topping cokelat yang renyah dan nikmat di setiap gigitan.", price: "Rp 15.000" },
-        2: { title: "Brownie Cheddar Cheese ❤️", description: "Kombinasi unik brownie lezat dengan keju cheddar yang gurih dan menggugah selera.", price: "Rp 15.000" },
-        5: { title: "Brownie Original 🧸", description: "Brownie klasik kami dengan tekstur lembut dan rasa cokelat yang kaya. Pilihan terbaik untuk pemula!", price: "Rp 14.000" },
-        4: { title: "Brownie Special 🎁", description: "Resep spesial eksklusif dengan bahan-bahan pilihan terbaik. Dijamin membuat Anda ketagihan!", price: "Rp 17.000" },
-        3: { title: "Burnt Cheesecake 🍮", description: "Cheesecake bergaya Basque dengan tekstur creamy dan lapisan yang sedikit gosong. Rasa yang sempurna!", price: "Rp 20.000" },
-        // Untuk COMING SOON, tidak perlu data di sini.
+        1: { 
+            title: "Brownie Choco Crunchy 🌰", 
+            description: "Brownie premium dengan topping cokelat yang renyah. Tekstur lembut di dalam dengan kehangatan cokelat yang sempurna. Setiap gigitan memberikan sensasi renyah yang tak terlupakan!", 
+            price: "Rp 15.000" 
+        },
+        2: { 
+            title: "Brownie Cheddar Cheese ❤️", 
+            description: "Kombinasi unik yang memadukan manisnya brownie dengan gurihnya keju cheddar premium. Rasakan harmoni sempurna antara dua rasa dalam satu gigitan istimewa!", 
+            price: "Rp 15.000" 
+        },
+        5: { 
+            title: "Brownie Original Classic 🧸", 
+            description: "Brownie klasik kami dengan tekstur lembut dan rasa cokelat yang kaya. Pilihan terbaik untuk pemula yang ingin merasakan kesempurnaan brownie tradisional!", 
+            price: "Rp 14.000" 
+        },
+        4: { 
+            title: "Brownie Special Edition 🎁", 
+            description: "Resep spesial eksklusif dengan bahan-bahan pilihan terbaik kami. Dijamin membuat Anda ketagihan dengan kombinasi rahasia yang tak tertandingi!", 
+            price: "Rp 17.000" 
+        },
+        3: { 
+            title: "Burnt Cheesecake Basque 🍮", 
+            description: "Cheesecake bergaya Basque dengan tekstur creamy yang sempurna dan lapisan karamel yang sedikit gosong. Cita rasa yang kompleks dan tak terlupakan di setiap gigitan!", 
+            price: "Rp 20.000" 
+        },
     };
 
-    // 1. NAVIGASI INTERAKTIF & SMOOTH SCROLL
+    // ===== 1. NAVIGASI SMOOTH SCROLL =====
     const navbar = document.querySelector('.navbar');
     const navLinks = document.querySelectorAll('.nav-links a');
 
-    // Smooth Scroll (menggunakan JS untuk konsistensi cross-browser dan offset)
     navLinks.forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             const targetId = this.getAttribute('href');
-            // Menambahkan offset agar tidak tertutup navbar fixed
             const targetElement = document.querySelector(targetId);
-            const offsetTop = targetElement.offsetTop - navbar.offsetHeight; 
+            const offsetTop = targetElement.offsetTop - navbar.offsetHeight;
             window.scrollTo({
                 top: offsetTop,
                 behavior: 'smooth'
@@ -28,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Header Berubah Gaya Saat Scroll
+    // ===== 2. NAVBAR SCROLL EFFECT =====
     window.addEventListener('scroll', () => {
         if (window.scrollY > 50) {
             navbar.classList.add('scrolled');
@@ -37,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 2. "PEEK" PRODUK INTERAKTIF (MODAL)
+    // ===== 3. PRODUCT MODAL INTERAKTIF =====
     const productImages = document.querySelectorAll('.product-img');
     const modal = document.getElementById('product-modal');
     const closeModal = document.querySelector('.close-btn');
@@ -45,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalImage = document.getElementById('modal-image');
     const modalDetails = document.getElementById('modal-details');
     const modalPrice = document.querySelector('.modal-price');
+    const modalOverlay = document.querySelector('.modal-overlay');
 
     productImages.forEach(img => {
         img.addEventListener('click', function() {
@@ -54,38 +72,70 @@ document.addEventListener('DOMContentLoaded', () => {
             if (data) {
                 modalTitle.textContent = data.title;
                 modalImage.src = this.src;
-                modalDetails.innerHTML = `${data.description}`;
+                modalDetails.innerHTML = `<p>${data.description}</p>`;
                 modalPrice.textContent = `Harga: ${data.price}`;
                 modal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
             }
         });
     });
 
-    // Tutup modal
     closeModal.addEventListener('click', () => {
         modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    });
+
+    modalOverlay.addEventListener('click', () => {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
     });
 
     window.addEventListener('click', (event) => {
         if (event.target === modal) {
             modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
     });
 
-    // ** Bagian 3 (Formulir Pemesanan) Dihapus Total **
-
-    // 4. MODE MALAM (BONUS)
+    // ===== 4. DARK MODE TOGGLE =====
     const themeToggle = document.getElementById('theme-toggle');
+
+    // Load saved theme
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+        themeToggle.textContent = '☀️';
+    }
 
     themeToggle.addEventListener('click', () => {
         document.body.classList.toggle('dark-mode');
-        // Ganti ikon toggle
-        if (document.body.classList.contains('dark-mode')) {
-            themeToggle.textContent = '☀️';
-            themeToggle.setAttribute('aria-label', 'Toggle Light Mode');
-        } else {
-            themeToggle.textContent = '🌙';
-            themeToggle.setAttribute('aria-label', 'Toggle Dark Mode');
-        }
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        themeToggle.textContent = isDarkMode ? '☀️' : '🌙';
+        localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+    });
+
+    // ===== 5. PARALLAX EFFECT (BONUS) =====
+    window.addEventListener('scroll', () => {
+        const hero = document.querySelector('.main-header');
+        const scrollY = window.scrollY;
+        hero.style.backgroundPosition = `0 ${scrollY * 0.5}px`;
+    });
+
+    // ===== 6. INTERSECTION OBSERVER untuk LAZY ANIMATION =====
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.animationPlayState = 'running';
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.product-card').forEach(card => {
+        observer.observe(card);
     });
 });
